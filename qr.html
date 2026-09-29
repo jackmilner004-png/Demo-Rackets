@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Club QR Codes | Demo Rackets</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<header class="site-header always-solid">
+  <div class="container nav">
+    <a class="brand" href="index.html">
+      <img src="assets/img/logo.svg" alt="">
+      <span><span class="brand-name">DEMO RACKETS</span><span class="brand-sub">Leeds</span></span>
+    </a>
+    <nav class="nav-links"><a class="btn btn-gold" href="#" onclick="window.print();return false;">Print</a></nav>
+  </div>
+</header>
+
+<main>
+  <section style="padding-top:130px">
+    <div class="container">
+      <div class="section-head no-print">
+        <span class="eyebrow">For racket stands</span>
+        <h2>Club QR codes</h2>
+        <p>Print these for each club. The first code opens the booking page; each club code opens it with that venue already selected.</p>
+      </div>
+      <div class="qr-grid" id="qr-grid"></div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script>
+  (function () {
+    const DR = window.DR;
+    const base = new URL("book.html", location.href).href;
+    const cards = [{ title: "Book a demo", sub: "All Leeds venues", url: base }].concat(
+      DR.venues.map(v => ({ title: v.name, sub: v.area, url: base + "?venue=" + encodeURIComponent(v.id) }))
+    );
+    const grid = document.getElementById("qr-grid");
+    cards.forEach((c, i) => {
+      const el = document.createElement("div");
+      el.className = "qr-card";
+      el.innerHTML = `<img class="logo" src="assets/img/logo.svg" alt="">
+        <span class="eyebrow">Scan to book a demo</span>
+        <h3></h3><div style="color:var(--muted);font-size:14px"></div>
+        <div class="qr" id="qr-${i}"></div><small></small>`;
+      el.querySelector("h3").textContent = c.title;
+      el.querySelector("h3 + div").textContent = c.sub;
+      el.querySelector("small").textContent = c.url;
+      grid.appendChild(el);
+      if (window.QRCode) {
+        new QRCode(document.getElementById("qr-" + i), { text: c.url, width: 360, height: 360, colorDark: "#0B3B2A", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+      } else {
+        document.getElementById("qr-" + i).textContent = "QR library failed to load — check your connection.";
+      }
+    });
+  })();
+</script>
+</body>
+</html>

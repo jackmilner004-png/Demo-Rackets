@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Demo Rackets emblem">
+  <!-- Outer ring -->
+  <circle cx="60" cy="60" r="56" fill="#0B3B2A"/>
+  <circle cx="60" cy="60" r="52" fill="none" stroke="#C6A15B" stroke-width="1.5"/>
+  <!-- Laurel sprigs -->
+  <g fill="#C6A15B">
+    <g id="leaf-l">
+      <ellipse cx="26" cy="74" rx="3" ry="7" transform="rotate(-35 26 74)"/>
+      <ellipse cx="22" cy="62" rx="3" ry="7" transform="rotate(-15 22 62)"/>
+      <ellipse cx="22" cy="49" rx="3" ry="7" transform="rotate(5 22 49)"/>
+      <ellipse cx="27" cy="37" rx="3" ry="6.5" transform="rotate(25 27 37)"/>
+    </g>
+    <use href="#leaf-l" transform="translate(120 0) scale(-1 1)"/>
+  </g>
+  <!-- Racket -->
+  <g transform="rotate(-30 60 60)">
+    <ellipse cx="60" cy="46" rx="17" ry="22" fill="none" stroke="#F4EEDF" stroke-width="3.2"/>
+    <g stroke="#F4EEDF" stroke-width="0.9" opacity="0.75">
+      <line x1="52" y1="26" x2="52" y2="66"/>
+      <line x1="60" y1="24" x2="60" y2="68"/>
+      <line x1="68" y1="26" x2="68" y2="66"/>
+      <line x1="44" y1="38" x2="76" y2="38"/>
+      <line x1="43" y1="46" x2="77" y2="46"/>
+      <line x1="44" y1="54" x2="76" y2="54"/>
+    </g>
+    <path d="M55 67 L58.5 80 L61.5 80 L65 67" fill="none" stroke="#F4EEDF" stroke-width="2.4" stroke-linejoin="round"/>
+    <rect x="57.2" y="80" width="5.6" height="18" rx="1.6" fill="#C6A15B"/>
+  </g>
+  <!-- Ball -->
+  <circle cx="84" cy="84" r="6" fill="#D8E26A"/>
+  <path d="M79 81 q5 3 10 0" fill="none" stroke="#0B3B2A" stroke-width="0.9"/>
+</svg>

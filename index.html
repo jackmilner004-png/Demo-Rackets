@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo Rackets | Try before you buy · Leeds</title>
+  <meta name="description" content="Demo Rackets places premium tennis rackets at clubs across Leeds. Pick a racket, book a slot, and play with it on court before you buy.">
+  <meta name="theme-color" content="#0B3B2A">
+  <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<header class="site-header" id="top">
+  <div class="container nav">
+    <a class="brand" href="index.html" aria-label="Demo Rackets home">
+      <img src="assets/img/logo.svg" alt="">
+      <span><span class="brand-name">DEMO RACKETS</span><span class="brand-sub">Leeds</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#collection">The Collection</a>
+      <a href="#how">How it works</a>
+      <a href="#venues">Venues</a>
+      <a class="btn btn-gold" href="book.html">Book a demo</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="hero" aria-label="Introduction">
+    <div class="photo photo--hero" role="img" aria-label="Grass court at a championship tennis match"></div>
+    <div class="container hero-inner">
+      <span class="eyebrow light">Premium racket demos · Leeds</span>
+      <h1>Find the racket that <em>plays like you.</em></h1>
+      <p class="lede">The latest tour frames, waiting at your club. Choose a racket, book a slot and take it on court — no deposit, no guesswork, no buying blind.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="book.html">Book a demo</a>
+        <a class="btn btn-outline" href="#collection">View the collection</a>
+      </div>
+      <div class="hero-meta">
+        <div><strong data-count="rackets">6</strong>Tour-level rackets</div>
+        <div><strong data-count="venues">4</strong>Partner clubs</div>
+        <div><strong>90 min</strong>Demo sessions</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="on-dark" id="how">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">The Demo Rackets way</span>
+        <h2>On court in three moves</h2>
+        <p>Our rackets live at partner clubs across Leeds, strung and ready. Book online or scan the code at your club.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">i.</div>
+          <h3>Choose your club</h3>
+          <p>Pick the venue you play at. Every club holds its own curated set of demo frames.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">ii.</div>
+          <h3>Select a racket</h3>
+          <p>Browse by feel — control, spin, power or comfort — and choose the frame you want to try.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">iii.</div>
+          <h3>Book your slot</h3>
+          <p>Reserve a 90-minute session, collect the racket at the club and play your normal game.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collection -->
+  <section id="collection">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">The Collection</span>
+        <h2>Rackets available to demo</h2>
+        <p>Each frame is freshly strung and maintained between sessions. Tap any racket for full specifications and where to find it.</p>
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="Filter rackets by style"></div>
+      <div class="rackets" id="racket-grid"></div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="on-dark" aria-label="Gallery" style="padding-top:0;padding-bottom:0">
+    <div class="split">
+      <div class="photo photo--centre" role="img" aria-label="Centre court from the stands"></div>
+      <div class="split-copy">
+        <span class="eyebrow">Our philosophy</span>
+        <h2>The feel is everything.</h2>
+        <p>A racket is personal. Weight, balance, string pattern — tiny differences change how every ball leaves the strings. The only way to know is to play.</p>
+        <p>Demo Rackets brings championship-grade equipment to the courts where you already play, so your next racket is chosen on court, not from a spec sheet.</p>
+        <div style="margin-top:14px"><a class="btn btn-gold" href="book.html">Start a booking</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:0">
+    <div class="container">
+      <div class="gallery">
+        <figure class="photo photo--serve" role="img" aria-label="A player serving on grass" style="margin:0"><figcaption>The serve</figcaption></figure>
+        <figure class="photo photo--net" role="img" aria-label="Volley at the net" style="margin:0"><figcaption>At the net</figcaption></figure>
+        <figure class="photo photo--ball" role="img" aria-label="Tennis ball on a grass court" style="margin:0"><figcaption>Fresh grass</figcaption></figure>
+        <figure class="photo photo--crowd" role="img" aria-label="Spectators around a show court" style="margin:0"><figcaption>Match day</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Venues -->
+  <section id="venues">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Where to play</span>
+        <h2>Partner clubs</h2>
+        <p>Collect your demo racket from the club desk at any of our Leeds venues.</p>
+      </div>
+      <div class="venues" id="venue-grid"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="photo photo--booking" aria-hidden="true"></div>
+    <div class="container">
+      <span class="rule eyebrow light">Your next racket</span>
+      <h2>Play it before you own it.</h2>
+      <p>Book a 90-minute demo at your club today. Scan the code on the racket stand, or book right here.</p>
+      <a class="btn btn-gold" href="book.html">Book a demo</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="index.html" style="margin-bottom:16px">
+          <img src="assets/img/logo.svg" alt="">
+          <span><span class="brand-name">DEMO RACKETS</span><span class="brand-sub">Leeds</span></span>
+        </a>
+        <p style="max-width:300px">Premium tennis racket demos, placed at clubs across Leeds.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="#collection">The Collection</a>
+        <a href="#how">How it works</a>
+        <a href="#venues">Venues</a>
+      </div>
+      <div>
+        <h4>Book</h4>
+        <a href="book.html">Book a demo</a>
+        <a href="qr.html">Club QR codes</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a id="footer-email" href="mailto:hello@demorackets.co.uk">hello@demorackets.co.uk</a>
+        <span>Leeds, West Yorkshire</span>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>© <span id="year"></span> Demo Rackets. All rights reserved.</span>
+      <span>Racket names and brands are trademarks of their respective owners.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Racket detail modal -->
+<div class="modal" id="racket-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card">
+    <button class="modal-close" type="button" aria-label="Close">×</button>
+    <div class="racket-visual" id="modal-visual"></div>
+    <div class="modal-body">
+      <span class="racket-brand" id="modal-brand"></span>
+      <h3 id="modal-title"></h3>
+      <p id="modal-blurb"></p>
+      <ul class="spec-list" id="modal-specs"></ul>
+      <span class="eyebrow">Available at</span>
+      <div class="venue-list" id="modal-venues" style="margin-top:12px"></div>
+      <a class="btn btn-green" id="modal-book" href="book.html">Book this racket</a>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

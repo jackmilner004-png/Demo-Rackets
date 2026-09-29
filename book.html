@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book a Demo | Demo Rackets Leeds</title>
+  <meta name="description" content="Book a premium tennis racket demo at your Leeds club. Choose your venue, racket and time.">
+  <meta name="theme-color" content="#0B3B2A">
+  <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<header class="site-header always-solid">
+  <div class="container nav">
+    <a class="brand" href="index.html" aria-label="Demo Rackets home">
+      <img src="assets/img/logo.svg" alt="">
+      <span><span class="brand-name">DEMO RACKETS</span><span class="brand-sub">Leeds</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="index.html#collection">The Collection</a>
+      <a href="index.html#venues">Venues</a>
+      <a class="btn btn-outline" href="index.html">Home</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="book-hero">
+    <div class="photo photo--booking" aria-hidden="true"></div>
+    <div class="container">
+      <span class="eyebrow light">Reservations</span>
+      <h1>Book your demo</h1>
+      <p id="hero-sub">Choose your club, your racket and your time. Collect it from the club desk and play.</p>
+    </div>
+  </div>
+
+  <div class="booking">
+    <div class="container">
+      <div class="booking-shell" id="booking-shell">
+        <div>
+          <div class="panel" id="booking-panel">
+            <div class="progress" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+            <div class="book-step" id="step-venue">
+              <div class="step-head"><span class="n">i.</span><h2>Select your venue</h2></div>
+              <div class="options venues-opt" id="venue-options" role="group" aria-label="Venue"></div>
+            </div>
+
+            <div class="book-step locked" id="step-racket">
+              <div class="step-head"><span class="n">ii.</span><h2>Choose a racket</h2></div>
+              <div class="options rackets-opt" id="racket-options" role="group" aria-label="Racket"></div>
+              <p class="hint" id="racket-hint">Select a venue to see the rackets kept there.</p>
+            </div>
+
+            <div class="book-step locked" id="step-time">
+              <div class="step-head"><span class="n">iii.</span><h2>Pick a date &amp; time</h2></div>
+              <div class="dates" id="date-options" role="group" aria-label="Date"></div>
+              <div class="slots" id="slot-options" role="group" aria-label="Time slot"></div>
+              <p class="hint" id="slot-hint"></p>
+            </div>
+
+            <form class="book-step locked" id="step-details" novalidate>
+              <div class="step-head"><span class="n">iv.</span><h2>Your details</h2></div>
+              <div class="form-grid">
+                <label class="field">Full name
+                  <input name="name" autocomplete="name" required>
+                </label>
+                <label class="field">Mobile
+                  <input name="phone" type="tel" autocomplete="tel" required>
+                </label>
+                <label class="field full">Email
+                  <input name="email" type="email" autocomplete="email" required>
+                </label>
+                <label class="field">Playing level
+                  <select name="level">
+                    <option>Beginner</option>
+                    <option selected>Club / Intermediate</option>
+                    <option>Advanced</option>
+                    <option>Competitive / County</option>
+                  </select>
+                </label>
+                <label class="field">Current racket (optional)
+                  <input name="current" placeholder="e.g. Wilson Clash 100">
+                </label>
+                <label class="field full">Notes (optional)
+                  <textarea name="notes" rows="3" placeholder="Anything we should know?"></textarea>
+                </label>
+                <label class="check full">
+                  <input type="checkbox" name="terms" required>
+                  <span>I'll collect and return the racket at the club desk within my slot, and take reasonable care of it during play.</span>
+                </label>
+              </div>
+              <p class="error" id="form-error" role="alert" hidden></p>
+            </form>
+          </div>
+        </div>
+
+        <aside class="summary" aria-live="polite">
+          <span class="eyebrow">Your booking</span>
+          <h3>Demo session</h3>
+          <dl>
+            <dt>Venue</dt><dd id="sum-venue" class="empty">Not selected</dd>
+            <dt>Racket</dt><dd id="sum-racket" class="empty">Not selected</dd>
+            <dt>Date</dt><dd id="sum-date" class="empty">Not selected</dd>
+            <dt>Time</dt><dd id="sum-time" class="empty">Not selected</dd>
+          </dl>
+          <button class="btn btn-gold" id="submit-btn" type="submit" form="step-details" disabled>Confirm booking</button>
+          <p class="fine">Free of charge. Please cancel by replying to your confirmation if you can no longer make it.</p>
+        </aside>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-base" style="padding-top:0">
+      <span>© <span id="year"></span> Demo Rackets · Leeds</span>
+      <a href="index.html" style="color:inherit">demorackets · home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/book.js"></script>
+</body>
+</html>
