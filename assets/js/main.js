@@ -16,6 +16,7 @@
   // Counts in the hero.
   $('[data-count="rackets"]').textContent = DR.rackets.length;
   $('[data-count="venues"]').textContent = DR.venues.length;
+  document.querySelectorAll("[data-price]").forEach((el) => (el.textContent = DR.priceText()));
   $("#year").textContent = new Date().getFullYear();
   const email = $("#footer-email");
   email.href = "mailto:" + DR.business.email;
@@ -57,7 +58,7 @@
             <div><strong>${esc(r.specs.pattern)}</strong>Strings</div>
           </div>
           <div class="racket-foot">
-            <small>At ${count} club${count === 1 ? "" : "s"}</small>
+            <small><strong class="price">${DR.priceText()}</strong> / session<br>At ${count} club${count === 1 ? "" : "s"}</small>
             <a class="btn btn-green" href="book.html?racket=${encodeURIComponent(r.id)}" data-book>Book demo</a>
           </div>
         </div>
@@ -79,6 +80,7 @@
     $("#modal-title").textContent = r.model;
     $("#modal-blurb").textContent = r.blurb;
     const specs = [
+      ["Demo price", DR.priceText() + " per 90-min session"],
       ["Style", r.category],
       ["Player level", r.level],
       ["Head size", r.specs.head],

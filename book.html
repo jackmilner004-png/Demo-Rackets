@@ -34,7 +34,7 @@
     <div class="container">
       <span class="eyebrow light">Reservations</span>
       <h1>Book your demo</h1>
-      <p id="hero-sub">Choose your club, your racket and your time. Collect it from the club desk and play.</p>
+      <p id="hero-sub">Choose your club, your racket and your time. £5.99 per 90-minute session.</p>
     </div>
   </div>
 
@@ -91,7 +91,7 @@
                 </label>
                 <label class="check full">
                   <input type="checkbox" name="terms" required>
-                  <span>I'll collect and return the racket at the club desk within my slot, and take reasonable care of it during play.</span>
+                  <span>I agree to pay the <span data-price>£5.99</span> demo fee, collect and return the racket at the club desk within my slot, and take reasonable care of it during play.</span>
                 </label>
               </div>
               <p class="error" id="form-error" role="alert" hidden></p>
@@ -108,8 +108,9 @@
             <dt>Date</dt><dd id="sum-date" class="empty">Not selected</dd>
             <dt>Time</dt><dd id="sum-time" class="empty">Not selected</dd>
           </dl>
+          <div class="sum-total"><span>Demo fee</span><strong id="sum-price">£5.99</strong></div>
           <button class="btn btn-gold" id="submit-btn" type="submit" form="step-details" disabled>Confirm booking</button>
-          <p class="fine">Free of charge. Please cancel by replying to your confirmation if you can no longer make it.</p>
+          <p class="fine" id="pay-note">Pay at the club desk when you collect your racket. Please let us know if you can no longer make it.</p>
         </aside>
       </div>
     </div>

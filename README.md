@@ -28,6 +28,16 @@ session length, contact email — lives in **`assets/js/data.js`**.
 
 Photos: see `assets/photos/README.md` for file names and image rights.
 
+## Pricing & payment
+
+Demos cost **£5.99 per 90-minute session**, set by `price` in `assets/js/data.js`
+(every price shown on the site comes from it).
+
+By default customers are told to pay at the club desk when they collect the
+racket. To take payment online, create a payment link (Stripe Payment Links,
+SumUp or PayPal) for £5.99 and paste it into `paymentLink` — the confirmation
+screen then shows a "Pay £5.99 now" button.
+
 ## Receiving bookings
 
 Out of the box the site runs in **demo mode**: bookings are confirmed on screen and

@@ -20,6 +20,15 @@ window.DR = {
    */
   bookingEndpoint: "",
 
+  /*
+   * Price per demo session, in pounds.
+   * `paymentLink` (optional): a Stripe / SumUp / PayPal payment link. When set,
+   * the confirmation screen shows a "Pay now" button that opens it. When empty,
+   * customers are told to pay at the club desk when they collect the racket.
+   */
+  price: 5.99,
+  paymentLink: "",
+
   booking: {
     // How far ahead people can book, in days.
     daysAhead: 14,
@@ -152,6 +161,10 @@ window.DR.racketSVG = function (r) {
   <g stroke="#3A3A3A" stroke-width="2">${[300, 316, 332, 348, 364, 380].map(y => `<line x1="90" y1="${y}" x2="110" y2="${y + 8}"/>`).join("")}</g>
   <rect x="87" y="398" width="26" height="10" rx="4" fill="${a}"/>
 </svg>`;
+};
+
+window.DR.priceText = function () {
+  return "£" + window.DR.price.toFixed(2);
 };
 
 window.DR.racketById = function (id) {

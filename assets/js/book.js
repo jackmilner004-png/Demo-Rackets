@@ -14,6 +14,9 @@
   let wantedRacket = params.get("racket");
 
   $("#year").textContent = new Date().getFullYear();
+  document.querySelectorAll("[data-price]").forEach((el) => (el.textContent = DR.priceText()));
+  $("#sum-price").textContent = DR.priceText();
+  if (DR.paymentLink) $("#pay-note").textContent = "You'll be able to pay online once your booking is confirmed. Please let us know if you can no longer make it.";
 
   // ---------- helpers ----------
   const pad = (n) => String(n).padStart(2, "0");
@@ -222,6 +225,7 @@
       racket: r.id, racketName: `${r.brand} ${r.model}`,
       date: state.date, time: state.time, ends: endTime(state.time),
       name: data.name, email: data.email, phone: data.phone,
+      price: DR.price, priceText: DR.priceText(),
       level: data.level, current: data.current || "", notes: data.notes || "",
       createdAt: new Date().toISOString(),
     };
@@ -257,14 +261,18 @@
         <div class="seal">✓</div>
         <span class="eyebrow">Booking confirmed</span>
         <h2>See you on court, ${esc(b.name.split(" ")[0])}.</h2>
-        <p>Your demo racket will be waiting at the club desk. Show this reference when you collect it.</p>
+        <p>Your demo racket will be waiting at the club desk. Quote this reference when you collect it.</p>
         <div class="ref">${esc(b.ref)}</div>
         <ul class="spec-list confirm-details">
           <li><span>Venue</span><span>${esc(b.venueName)}</span></li>
           <li><span>Racket</span><span>${esc(b.racketName)}</span></li>
           <li><span>Date</span><span>${esc(fmtLong(b.date))}</span></li>
           <li><span>Time</span><span>${esc(b.time)} – ${esc(b.ends)}</span></li>
+          <li><span>Demo fee</span><span>${esc(b.priceText)}</span></li>
         </ul>
+        ${DR.paymentLink
+          ? `<div class="confirm-actions" style="margin-bottom:16px"><a class="btn btn-gold" href="${esc(DR.paymentLink)}" target="_blank" rel="noopener">Pay ${esc(b.priceText)} now</a></div>`
+          : `<div class="pay-box"><strong>Payment:</strong> please pay the ${esc(b.priceText)} demo fee at the club desk when you collect your racket.</div>`}
         <div class="confirm-actions">
           <a class="btn btn-green" href="book.html?venue=${encodeURIComponent(b.venue)}">Book another</a>
           <a class="btn btn-ghost" href="index.html#collection">Browse rackets</a>
@@ -278,7 +286,7 @@
   const qVenue = params.get("venue");
   if (qVenue && DR.venueById(qVenue)) {
     selectVenue(qVenue);
-    $("#hero-sub").textContent = `Booking at ${DR.venueById(qVenue).name}. Choose your racket and time.`;
+    $("#hero-sub").textContent = `Booking at ${DR.venueById(qVenue).name}. Choose your racket and time — ${DR.priceText()} per session.`;
   } else if (DR.venues.length === 1) {
     selectVenue(DR.venues[0].id);
   } else {

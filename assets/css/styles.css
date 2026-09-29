@@ -447,3 +447,14 @@ label.field input:focus, label.field select:focus, label.field textarea:focus { 
 }
 
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Pricing ---------- */
+.racket-foot .price { color: var(--green-700); font-size: 15px; }
+.sum-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 16px 0; margin: -8px 0 20px;
+  border-top: 1px solid rgba(198,161,91,.35); border-bottom: 1px solid rgba(198,161,91,.35);
+}
+.sum-total span { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); }
+.sum-total strong { font: 600 30px/1 var(--serif); color: var(--gold-light); }
+.confirm .pay-box { max-width: 420px; margin: 0 auto 28px; padding: 18px 20px; background: var(--cream); border-left: 3px solid var(--gold); text-align: left; font-size: 14px; color: var(--green-900); }
