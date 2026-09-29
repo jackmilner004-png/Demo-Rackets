@@ -9,11 +9,12 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const STORE_KEY = "dr-bookings";
 
-  const state = { venue: null, racket: null, date: null, time: null };
+  const state = { venue: null, racket: null, date: null, time: null, minutes: DR.booking.defaultDuration };
   const params = new URLSearchParams(location.search);
   let wantedRacket = params.get("racket");
 
   $("#year").textContent = new Date().getFullYear();
+  document.querySelectorAll("[data-duration]").forEach((el) => (el.textContent = DR.durationText()));
   document.querySelectorAll("[data-price]").forEach((el) => (el.textContent = DR.priceText()));
   $("#sum-price").textContent = DR.priceText();
   if (DR.paymentLink) $("#pay-note").textContent = "You'll be able to pay online once your booking is confirmed. Please let us know if you can no longer make it.";
@@ -23,9 +24,9 @@
   const isoDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   const fromIso = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
   const fmtLong = (s) => fromIso(s).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
-  const endTime = (t) => {
-    const [h, m] = t.split(":").map(Number);
-    const total = h * 60 + m + DR.booking.slotMinutes;
+  const toMins = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+  const endTime = (t, minutes = state.minutes) => {
+    const total = toMins(t) + minutes;
     return `${pad(Math.floor(total / 60) % 24)}:${pad(total % 60)}`;
   };
   const visual = (r) => (r.image ? `<img src="${esc(r.image)}" alt="">` : DR.racketSVG(r));
@@ -40,8 +41,15 @@
       localStorage.setItem(STORE_KEY, JSON.stringify(all));
     } catch (e) { /* storage unavailable: booking still sent to endpoint if configured */ }
   }
-  const isTaken = (venue, racket, date, time) =>
-    loadBookings().some((b) => b.venue === venue && b.racket === racket && b.date === date && b.time === time);
+  // A slot is taken if the racket is already booked for any part of it.
+  const isTaken = (venue, racket, date, time, minutes) => {
+    const start = toMins(time), end = start + minutes;
+    return loadBookings().some((b) => {
+      if (b.venue !== venue || b.racket !== racket || b.date !== date) return false;
+      const bStart = toMins(b.time), bEnd = bStart + (b.minutes || 90);
+      return start < bEnd && bStart < end;
+    });
+  };
 
   // ---------- step 1: venue ----------
   function renderVenues() {
@@ -123,6 +131,9 @@
   })();
 
   function renderTime() {
+    $("#duration-options").innerHTML = DR.booking.durations
+      .map((m) => `<button type="button" class="chip${m === state.minutes ? " active" : ""}" data-minutes="${m}" aria-pressed="${m === state.minutes}">${m} min</button>`)
+      .join("");
     $("#date-options").innerHTML = dates
       .map((iso, i) => {
         const d = fromIso(iso);
@@ -144,7 +155,7 @@
       .map((t) => {
         const [h, m] = t.split(":").map(Number);
         const past = isToday && h * 60 + m <= nowMins;
-        const taken = isTaken(state.venue, state.racket, state.date, t);
+        const taken = isTaken(state.venue, state.racket, state.date, t, state.minutes);
         const off = past || taken;
         if (!off) free++;
         return `<button type="button" class="slot" data-time="${t}" aria-pressed="${state.time === t}" ${off ? "disabled" : ""}>
@@ -153,9 +164,18 @@
       })
       .join("");
     $("#slot-hint").textContent = free
-      ? `${DR.booking.slotMinutes}-minute sessions. Collect the racket from the club desk at the start of your slot.`
-      : "No slots left on this day — try another date.";
+      ? `${state.minutes}-minute session. Collect the racket from the club desk at the start of your slot.`
+      : "No slots left for this length on this day. Try a shorter session or another date.";
   }
+  $("#duration-options").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-minutes]");
+    if (!b) return;
+    state.minutes = Number(b.dataset.minutes);
+    // Keep the chosen time if it is still free for the new length.
+    if (state.time && isTaken(state.venue, state.racket, state.date, state.time, state.minutes)) state.time = null;
+    renderTime();
+    update();
+  });
   $("#date-options").addEventListener("click", (e) => {
     const b = e.target.closest(".date");
     if (!b) return;
@@ -184,7 +204,7 @@
     setSum("#sum-venue", v && v.name);
     setSum("#sum-racket", r && `${r.brand} ${r.model}`);
     setSum("#sum-date", v && r && state.date ? fmtLong(state.date) : "");
-    setSum("#sum-time", state.time ? `${state.time} – ${endTime(state.time)}` : "");
+    setSum("#sum-time", state.time ? `${state.time} – ${endTime(state.time)} (${state.minutes} min)` : "");
 
     $("#step-racket").classList.toggle("locked", !v);
     $("#step-time").classList.toggle("locked", !r);
@@ -207,7 +227,7 @@
       form.reportValidity();
       return;
     }
-    if (isTaken(state.venue, state.racket, state.date, state.time)) {
+    if (isTaken(state.venue, state.racket, state.date, state.time, state.minutes)) {
       err.textContent = "Sorry — that slot has just been taken. Please pick another time.";
       err.hidden = false;
       state.time = null;
@@ -223,7 +243,7 @@
       ref: "DR-" + Math.random().toString(36).slice(2, 7).toUpperCase(),
       venue: v.id, venueName: v.name,
       racket: r.id, racketName: `${r.brand} ${r.model}`,
-      date: state.date, time: state.time, ends: endTime(state.time),
+      date: state.date, time: state.time, minutes: state.minutes, ends: endTime(state.time),
       name: data.name, email: data.email, phone: data.phone,
       price: DR.price, priceText: DR.priceText(),
       level: data.level, current: data.current || "", notes: data.notes || "",
@@ -267,7 +287,7 @@
           <li><span>Venue</span><span>${esc(b.venueName)}</span></li>
           <li><span>Racket</span><span>${esc(b.racketName)}</span></li>
           <li><span>Date</span><span>${esc(fmtLong(b.date))}</span></li>
-          <li><span>Time</span><span>${esc(b.time)} – ${esc(b.ends)}</span></li>
+          <li><span>Time</span><span>${esc(b.time)} – ${esc(b.ends)} (${b.minutes} min)</span></li>
           <li><span>Demo fee</span><span>${esc(b.priceText)}</span></li>
         </ul>
         ${DR.paymentLink

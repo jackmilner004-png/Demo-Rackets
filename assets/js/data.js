@@ -32,10 +32,12 @@ window.DR = {
   booking: {
     // How far ahead people can book, in days.
     daysAhead: 14,
-    // Length of one demo session, in minutes.
-    slotMinutes: 90,
+    // Session lengths customers can choose from, in minutes (same price for each).
+    durations: [60, 90, 120],
+    // Length that is pre-selected on the booking page.
+    defaultDuration: 90,
     // Slot start times offered at every venue unless the venue overrides them.
-    defaultSlots: ["08:00", "09:30", "11:00", "12:30", "14:00", "15:30", "17:00", "18:30", "20:00"],
+    defaultSlots: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"],
   },
 
   /*
@@ -165,6 +167,13 @@ window.DR.racketSVG = function (r) {
 
 window.DR.priceText = function () {
   return "£" + window.DR.price.toFixed(2);
+};
+
+/* "60–120 min", built from the durations above. */
+window.DR.durationText = function () {
+  const ds = window.DR.booking.durations;
+  const lo = Math.min(...ds), hi = Math.max(...ds);
+  return lo === hi ? `${lo} min` : `${lo}–${hi} min`;
 };
 
 window.DR.racketById = function (id) {

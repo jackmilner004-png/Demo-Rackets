@@ -16,6 +16,7 @@
   // Counts in the hero.
   $('[data-count="rackets"]').textContent = DR.rackets.length;
   $('[data-count="venues"]').textContent = DR.venues.length;
+  document.querySelectorAll("[data-duration]").forEach((el) => (el.textContent = DR.durationText()));
   document.querySelectorAll("[data-price]").forEach((el) => (el.textContent = DR.priceText()));
   $("#year").textContent = new Date().getFullYear();
   const email = $("#footer-email");
@@ -80,7 +81,7 @@
     $("#modal-title").textContent = r.model;
     $("#modal-blurb").textContent = r.blurb;
     const specs = [
-      ["Demo price", DR.priceText() + " per 90-min session"],
+      ["Demo price", DR.priceText() + " per session (" + DR.durationText() + ")"],
       ["Style", r.category],
       ["Player level", r.level],
       ["Head size", r.specs.head],

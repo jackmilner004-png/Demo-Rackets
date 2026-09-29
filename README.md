@@ -30,7 +30,7 @@ Photos: see `assets/photos/README.md` for file names and image rights.
 
 ## Pricing & payment
 
-Demos cost **£5.99 per 90-minute session**, set by `price` in `assets/js/data.js`
+Demos cost **£5.99 per session**; customers choose 60, 90 or 120 minutes (`booking.durations`). The price is set by `price` in `assets/js/data.js`
 (every price shown on the site comes from it).
 
 By default customers are told to pay at the club desk when they collect the
