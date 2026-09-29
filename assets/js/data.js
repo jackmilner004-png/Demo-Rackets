@@ -42,7 +42,7 @@ window.DR = {
 
   /*
    * Rackets. `frame` / `accent` colour the illustration used when there is no
-   * photo. `image` is the racket photo (portrait, about 900×1200).
+   * photo. `image` is a cut-out racket photo with a transparent background (.webp or .png).
    */
   rackets: [
     {
@@ -51,7 +51,7 @@ window.DR = {
       model: "Pure Aero",
       category: "Spin",
       frame: "#5A5F63", accent: "#E4F222",
-      image: "assets/photos/rackets/babolat-pure-aero.jpg",
+      image: "assets/photos/rackets/babolat-pure-aero.webp",
       specs: { head: "100 sq in", weight: "300 g", balance: "32 cm", pattern: "16×19" },
       blurb: "Built for heavy topspin from the baseline. Fast through the air with a lively, forgiving response.",
       level: "Intermediate – Advanced",
@@ -62,7 +62,7 @@ window.DR = {
       model: "Blade 98 v9",
       category: "Feel",
       frame: "#1F6B5C", accent: "#1B1B1B",
-      image: "assets/photos/rackets/wilson-blade-98.jpg",
+      image: "assets/photos/rackets/wilson-blade-98.webp",
       specs: { head: "98 sq in", weight: "305 g", balance: "32 cm", pattern: "16×19" },
       blurb: "Flexible and connected. Exceptional touch at the net with the control to go after your shots.",
       level: "Intermediate – Advanced",
@@ -73,7 +73,7 @@ window.DR = {
       model: "Pure Drive",
       category: "Power",
       frame: "#1E9BD7", accent: "#1C2A3A",
-      image: "assets/photos/rackets/babolat-pure-drive.jpg",
+      image: "assets/photos/rackets/babolat-pure-drive.webp",
       specs: { head: "100 sq in", weight: "300 g", balance: "32 cm", pattern: "16×19" },
       blurb: "Effortless power and plenty of spin. One of the most popular frames on tour and at the club.",
       level: "All levels",
@@ -84,7 +84,7 @@ window.DR = {
       model: "Speed MP",
       category: "All-court",
       frame: "#F4F4F4", accent: "#3A3A3A",
-      image: "assets/photos/rackets/head-speed-mp.jpg",
+      image: "assets/photos/rackets/head-speed-mp.webp",
       specs: { head: "100 sq in", weight: "300 g", balance: "32 cm", pattern: "16×19" },
       blurb: "A modern all-rounder. Stable, quick to swing and comfortable from every part of the court.",
       level: "Intermediate – Advanced",

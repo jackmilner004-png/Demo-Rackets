@@ -208,13 +208,11 @@ section { padding: 120px 0; }
     linear-gradient(160deg, var(--green-800), var(--green-950));
 }
 .racket-visual svg { height: 88%; transform: rotate(-18deg); filter: drop-shadow(0 20px 20px rgba(0,0,0,.35)); transition: transform .5s; }
-/* Racket photos: a framed print on the green panel, tilted like the illustrations */
+/* Racket photos: cut-outs on the green panel, tilted like the illustrations */
 .racket-visual .racket-photo {
-  height: 268px; width: 201px; max-width: 80%;
-  object-fit: cover; object-position: 50% 40%;
-  border: 1px solid rgba(198,161,91,.7); border-radius: 3px;
-  box-shadow: 0 0 0 5px rgba(244,238,223,.06), 0 22px 30px -12px rgba(0,0,0,.55);
-  transform: rotate(-6deg);
+  height: 268px; width: auto; max-width: 88%; object-fit: contain;
+  filter: drop-shadow(0 20px 18px rgba(0,0,0,.45));
+  transform: rotate(-8deg);
   transition: transform .5s;
 }
 .racket-card:hover .racket-visual .racket-photo, .racket-card:focus-visible .racket-visual .racket-photo { transform: rotate(-2deg) scale(1.03); }
@@ -252,7 +250,7 @@ section { padding: 120px 0; }
 }
 .modal-card .racket-visual { height: 100%; min-height: 420px; overflow: hidden; }
 .modal-card .racket-visual svg { height: 78%; max-height: 520px; }
-.modal-card .racket-visual .racket-photo { height: auto; width: 72%; max-width: 360px; aspect-ratio: 3 / 4; transform: rotate(-4deg); }
+.modal-card .racket-visual .racket-photo { height: 520px; width: auto; max-width: 90%; transform: rotate(-6deg); }
 .modal-body { padding: 44px 40px; }
 .modal-body h3 { font-size: 44px; color: var(--green-900); margin: 10px 0 16px; }
 .modal-body p { color: var(--muted); margin-bottom: 24px; }
@@ -381,10 +379,9 @@ section { padding: 120px 0; }
 .opt .mini { height: 110px; display: grid; place-items: center; margin: -4px 0 10px; border-radius: 3px; background: linear-gradient(160deg, var(--green-800), var(--green-950)); }
 .opt .mini svg { height: 92%; transform: rotate(-18deg); }
 .opt .mini .racket-photo {
-  height: 96px; width: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 40%;
-  border: 1px solid rgba(198,161,91,.7); border-radius: 2px;
-  box-shadow: 0 8px 14px -6px rgba(0,0,0,.5);
-  transform: rotate(-6deg); transition: transform .35s;
+  height: 104px; width: auto; object-fit: contain;
+  filter: drop-shadow(0 8px 8px rgba(0,0,0,.45));
+  transform: rotate(-8deg); transition: transform .35s;
 }
 .opt:hover .mini .racket-photo, .opt[aria-pressed="true"] .mini .racket-photo { transform: rotate(-2deg) scale(1.04); }
 

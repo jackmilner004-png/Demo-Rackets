@@ -14,7 +14,7 @@ so the site never looks broken.
 | `crowd.jpg`          | Gallery (wide tile)                      | Spectators / scoreboard / ivy-covered walls      | 1800×1000   |
 | `booking.jpg`        | Booking page banner + "Book" band        | Racket and balls on court, or a club court       | 2400×1200   |
 
-Racket photos (optional): add them under `rackets/` and set `image:` on the racket
+Racket photos: cut-outs with transparent backgrounds live under `rackets/` (.webp) and set `image:` on the racket
 in `assets/js/data.js`, e.g. `image: "assets/photos/rackets/pro-staff-97.jpg"`.
 
 ## Image rights — please read
