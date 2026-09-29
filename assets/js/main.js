@@ -5,7 +5,7 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   const venuesFor = (racketId) => DR.venues.filter((v) => v.rackets.includes(racketId));
-  const visual = (r) => (r.image ? `<img src="${esc(r.image)}" alt="${esc(r.brand + " " + r.model)}">` : DR.racketSVG(r));
+  const visual = (r) => (r.image ? `<img class="racket-photo" src="${esc(r.image)}" alt="${esc(r.brand + " " + r.model)}" loading="lazy">` : DR.racketSVG(r));
 
   // Header turns solid once you scroll past the top of the hero.
   const header = $(".site-header");
@@ -53,7 +53,7 @@
           <h3>${esc(r.model)}</h3>
           <p>${esc(r.blurb)}</p>
           <div class="spec-row">
-            <div><strong>${esc(r.specs.head)}</strong>Head</div>
+            <div><strong>${esc(r.specs.head.replace(" sq in", " in²"))}</strong>Head</div>
             <div><strong>${esc(r.specs.weight)}</strong>Weight</div>
             <div><strong>${esc(r.specs.balance)}</strong>Balance</div>
             <div><strong>${esc(r.specs.pattern)}</strong>Strings</div>

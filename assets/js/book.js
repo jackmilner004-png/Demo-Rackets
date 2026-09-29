@@ -29,7 +29,7 @@
     const total = toMins(t) + minutes;
     return `${pad(Math.floor(total / 60) % 24)}:${pad(total % 60)}`;
   };
-  const visual = (r) => (r.image ? `<img src="${esc(r.image)}" alt="">` : DR.racketSVG(r));
+  const visual = (r) => (r.image ? `<img class="racket-photo" src="${esc(r.image)}" alt="" loading="lazy">` : DR.racketSVG(r));
 
   function loadBookings() {
     try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; } catch (e) { return []; }
