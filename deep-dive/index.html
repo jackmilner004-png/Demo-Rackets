@@ -194,6 +194,50 @@ aside.gauge { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px);
   transition: top 1.2s cubic-bezier(.3,.7,.3,1);
 }
 
+/* descent scene between prompts */
+main { transition: opacity .25s; }
+body.descending main { opacity: 0; pointer-events: none; }
+.descent {
+  position: fixed; inset: 0; z-index: 5; cursor: pointer;
+  animation: fade-in .3s ease-out;
+}
+.descent.leaving { opacity: 0; transition: opacity .25s; }
+@keyframes fade-in { from { opacity: 0; } }
+.descent canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.descent .stage {
+  position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%);
+  display: grid; justify-items: center; pointer-events: none;
+}
+.beam {
+  position: absolute; left: 50%; top: 118px; width: 260px; height: 320px; transform: translateX(-50%);
+  background: radial-gradient(ellipse 50% 100% at 50% 0%, rgba(127,245,214,.22), transparent 70%);
+  clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
+}
+#diver { width: 70px; height: 140px; overflow: visible; animation: bob 1.6s ease-in-out infinite; }
+#diver .fin-l { transform-origin: 27px 34px; animation: kick .5s ease-in-out infinite alternate; }
+#diver .fin-r { transform-origin: 43px 34px; animation: kick .5s ease-in-out infinite alternate-reverse; }
+#diver.drifting { animation-duration: 3s; }
+#diver.drifting .fin-l, #diver.drifting .fin-r { animation-duration: 1.4s; }
+@keyframes kick { from { transform: rotate(-14deg); } to { transform: rotate(14deg); } }
+@keyframes bob { 50% { transform: translateX(3px) rotate(2deg); } }
+.descent-readout {
+  position: absolute; left: 0; right: 0; top: calc(42% + 112px);
+  display: grid; justify-items: center; gap: 8px; text-align: center; pointer-events: none;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+#descent-depth {
+  font: 800 clamp(48px, 10vw, 84px)/1 var(--display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 30px rgba(0,0,0,.5);
+}
+.descent-note { font: 700 14px var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--c, var(--ink-soft)); }
+.descent-zone { font: 500 15px var(--mono); color: var(--lure); min-height: 1.4em; opacity: 0; }
+.descent-zone.flash { animation: zone 2.4s ease-out forwards; }
+@keyframes zone { 15%, 70% { opacity: 1; } 100% { opacity: .75; } }
+.descent-skip {
+  position: absolute; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); left: 0; right: 0; text-align: center;
+  font: 500 12px var(--mono); color: var(--ink-faint); letter-spacing: .08em; text-transform: uppercase;
+}
+
 @media (max-width: 760px) {
   .wrap { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   aside.gauge { display: none; }
@@ -291,6 +335,33 @@ aside.gauge { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px);
     <div class="zone" style="top:99.4%"><b>Challenger Deep</b><small>10,935 m</small></div>
     <div id="gauge-marker"></div>
   </aside>
+</div>
+<div class="descent" id="descent" hidden aria-live="polite">
+  <canvas id="descent-canvas" aria-hidden="true"></canvas>
+  <div class="stage" aria-hidden="true">
+    <div class="beam"></div>
+    <!-- head-down diver: fins at the top, mask and regulator at the bottom -->
+    <svg id="diver" viewBox="0 0 70 140">
+      <polygon class="fin-l" points="22,34 32,34 30,2 12,6" fill="#f6d36b"/>
+      <polygon class="fin-r" points="38,34 48,34 58,6 40,2" fill="#f6d36b"/>
+      <rect x="22" y="28" width="11" height="44" rx="5.5" fill="#24485a"/>
+      <rect x="37" y="28" width="11" height="44" rx="5.5" fill="#24485a"/>
+      <rect x="26" y="58" width="18" height="40" rx="4" fill="#c9d6db"/>
+      <rect x="19" y="64" width="32" height="44" rx="12" fill="#2d5a70"/>
+      <rect x="19" y="84" width="32" height="5" fill="#16303d"/>
+      <path d="M21 104 L14 134 M49 104 L56 134" stroke="#2d5a70" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <circle cx="35" cy="118" r="13" fill="#1d3a4a"/>
+      <rect x="25" y="114" width="20" height="10" rx="4" fill="#7ff5d6"/>
+      <rect x="28" y="116" width="6" height="3" rx="1.5" fill="#e8f6f8" opacity=".7"/>
+      <circle cx="40" cy="132" r="3.5" fill="#16303d"/>
+    </svg>
+  </div>
+  <div class="descent-readout">
+    <div id="descent-depth">0 m</div>
+    <div class="descent-note" id="descent-note"></div>
+    <div class="descent-zone" id="descent-zone"></div>
+  </div>
+  <div class="descent-skip">Tap or press Enter to skip</div>
 </div>
 <script src="prompts.js"></script>
 <script src="game.js"></script>

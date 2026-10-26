@@ -194,7 +194,7 @@
   }
 
   function startGame(mode) {
-    game = { mode, round: 0, depth: 0, tanks: ENDLESS_TANKS, log: [] };
+    game = { mode, round: 0, depth: 0, shownDepth: 0, tanks: ENDLESS_TANKS, log: [] };
     setDepth(0);
     show(el.play);
     nextPrompt();
@@ -286,7 +286,6 @@
       game.tanks -= 1;
     }
     game.log.push({ prompt: p.prompt, answer: hit ? hit.label : null, tier: hit ? hit.tier : -1, points });
-    setDepth(game.depth);
 
     const deeper = hit
       ? shuffle(p.byTier.slice(hit.tier + 1, 5).flat()).slice(0, 3)
@@ -310,6 +309,168 @@
     el.reveal.hidden = false;
     el.next.hidden = false;
     el.next.focus();
+  }
+
+  // ---------- descent between prompts ----------
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const scene = {
+    root: $("#descent"),
+    canvas: $("#descent-canvas"),
+    diver: $("#diver"),
+    depth: $("#descent-depth"),
+    note: $("#descent-note"),
+    zone: $("#descent-zone"),
+  };
+
+  function advance() {
+    if (!game || game.answering || game.descending) return;
+    const from = game.shownDepth, to = game.depth;
+    const last = game.log[game.log.length - 1];
+    game.descending = true;
+    descend(from, to, last).then(() => {
+      if (!game) return;
+      game.descending = false;
+      game.shownDepth = to;
+      setDepth(to);
+      nextPrompt();
+    });
+  }
+
+  function descend(from, to, last) {
+    if (reduceMotion) return Promise.resolve();
+    const gain = to - from;
+    const duration = gain > 0 ? Math.min(1300 + gain * 1.5, 2900) : 1100;
+    const ppm = gain > 0 ? Math.min(Math.max(520 / gain, 0.55), 3) : 1; // pixels per metre
+    const ctx = scene.canvas.getContext("2d");
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let W, H;
+    function size() {
+      W = scene.canvas.clientWidth; H = scene.canvas.clientHeight;
+      scene.canvas.width = W * dpr; scene.canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    scene.note.textContent = last.tier < 0
+      ? (game.mode === "endless" ? "Out of air · one tank used" : "Out of air · holding depth")
+      : `${TIERS[last.tier].name} · +${fmt(gain)} m`;
+    scene.note.className = "descent-note tier-" + (last.tier < 0 ? "out" : last.tier);
+    scene.zone.textContent = "";
+    scene.diver.classList.toggle("drifting", gain === 0);
+    scene.root.hidden = false;
+    document.body.classList.add("descending");
+    size();
+
+    const snow = Array.from({ length: 70 }, () => ({
+      x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.6 + 0.4,
+      depth: Math.random() * 0.8 + 0.4, drift: Math.random() * 2 - 1,
+    }));
+    const bubbles = [];
+    let zoneName = zoneFor(from);
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+    return new Promise((resolve) => {
+      let start = 0, prev = 0, prevCam = from, done = false;
+      function finish() {
+        if (done) return;
+        done = true;
+        cancelAnimationFrame(raf);
+        window.removeEventListener("keydown", skip);
+        scene.root.removeEventListener("click", skip);
+        window.removeEventListener("resize", size);
+        scene.root.classList.add("leaving");
+        setTimeout(() => {
+          scene.root.hidden = true;
+          scene.root.classList.remove("leaving");
+          document.body.classList.remove("descending");
+          resolve();
+        }, 260);
+      }
+      function skip(e) {
+        if (e.type === "keydown" && !["Enter", " ", "Escape"].includes(e.key)) return;
+        if (e.type === "keydown") e.preventDefault();
+        setDepth(to);
+        scene.depth.textContent = fmt(to) + " m";
+        finish();
+      }
+      // let the click/Enter that opened the scene settle before listening for a skip
+      setTimeout(() => {
+        if (done) return;
+        window.addEventListener("keydown", skip);
+        scene.root.addEventListener("click", skip);
+      }, 150);
+      window.addEventListener("resize", size);
+
+      function frame(now) {
+        if (!start) { start = prev = now; }
+        const dt = Math.min((now - prev) / 1000, 0.05);
+        prev = now;
+        const t = Math.min((now - start) / duration, 1);
+        const cam = from + gain * ease(t);
+        const speed = (cam - prevCam) * ppm / Math.max(dt, 0.001); // px/s the water rushes past
+        prevCam = cam;
+
+        setDepth(Math.round(cam));
+        scene.depth.textContent = fmt(Math.round(cam)) + " m";
+        const z = zoneFor(cam);
+        if (z !== zoneName) {
+          zoneName = z;
+          scene.zone.textContent = "Entering the " + z.replace(/ zone$/, "") + " zone";
+          if (z.startsWith("Below")) scene.zone.textContent = z;
+          scene.zone.classList.remove("flash"); void scene.zone.offsetWidth; scene.zone.classList.add("flash");
+        }
+
+        ctx.clearRect(0, 0, W, H);
+        const cx = W / 2, cy = H * 0.42;
+
+        // depth lines every 50 m, labelled every 100 m
+        const span = H / ppm;
+        const first = Math.floor((cam - span) / 50) * 50;
+        ctx.font = "500 12px " + getComputedStyle(document.body).getPropertyValue("--mono");
+        for (let d = Math.max(first, 0); d < cam + span; d += 50) {
+          const y = cy + (d - cam) * ppm;
+          const major = d % 100 === 0;
+          ctx.strokeStyle = major ? "rgba(169,198,205,.28)" : "rgba(169,198,205,.12)";
+          ctx.setLineDash(major ? [] : [4, 6]);
+          ctx.beginPath(); ctx.moveTo(major ? 16 : 40, y); ctx.lineTo(W - 16, y); ctx.stroke();
+          if (major) {
+            ctx.fillStyle = "rgba(169,198,205,.6)";
+            ctx.fillText(fmt(d) + " m", 18, y - 6);
+          }
+        }
+        ctx.setLineDash([]);
+
+        // marine snow streams upward as the diver sinks
+        snow.forEach((s) => {
+          s.y -= (speed * s.depth + 6) * dt;
+          s.x += s.drift * 8 * dt;
+          if (s.y < -4) { s.y = H + 4; s.x = Math.random() * W; }
+          if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
+          ctx.fillStyle = `rgba(230,246,248,${0.15 + s.depth * 0.3})`;
+          ctx.beginPath();
+          const stretch = Math.min(speed * s.depth * 0.02, 10);
+          ctx.ellipse(s.x, s.y, s.r, s.r + stretch, 0, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // bubbles from the regulator, at the bottom of the head-down diver
+        if (Math.random() < 0.35) bubbles.push({ x: cx + 4 + Math.random() * 6, y: cy + 52, r: Math.random() * 3 + 1.5, wob: Math.random() * 6 });
+        for (let i = bubbles.length - 1; i >= 0; i--) {
+          const b = bubbles[i];
+          b.y -= (70 + speed) * dt;
+          b.wob += dt * 6;
+          const bx = b.x + Math.sin(b.wob) * 3;
+          if (b.y < -10) { bubbles.splice(i, 1); continue; }
+          ctx.strokeStyle = "rgba(200,245,255,.55)";
+          ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.arc(bx, b.y, b.r, 0, Math.PI * 2); ctx.stroke();
+        }
+
+        if (t < 1) raf = requestAnimationFrame(frame);
+        else setTimeout(finish, gain > 0 ? 380 : 0);
+      }
+      let raf = requestAnimationFrame(frame);
+    });
   }
 
   function escapeHtml(s) {
@@ -358,7 +519,7 @@
   // ---------- wiring ----------
 
   el.form.addEventListener("submit", submit);
-  el.next.addEventListener("click", nextPrompt);
+  el.next.addEventListener("click", advance);
   el.copy.addEventListener("click", copyShare);
   document.querySelectorAll("[data-start]").forEach((b) =>
     b.addEventListener("click", () => startGame(b.dataset.start)));
